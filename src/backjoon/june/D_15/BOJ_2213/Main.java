@@ -12,9 +12,9 @@ import java.util.StringTokenizer;
 // 인접하지 않은 노드들을 선택해 나아가면서 가중치가 가장 큰 경우의 수를 구함
 // 선택하거나 선택하지 않거나 2가지 상태를 나타낼 수 있음
 // 즉, K번째 노드를 선택했을 때는 1 -> d[K][1], 선택하지 않았을 때는 0 -> d[K][0]
-// 여기서 주의해야할 점은 이전에 선택하지 않았다면 현재도 선택하지 않을 수 있다는 것
-// 따라서, 전 노드가 선택되었다면 다음 노드는 무조건 선택되면 안되고
-// 전 노드가 선택되지 않았다면 다음 노드는 선택되거나 선택되지 않을 수 있다는 것
+// 여기서 주의 해야할 점은 해당 노드를 선택하지 않았다면 현재도 선택하지 않을 수 있다는 것
+// 따라서 노드를 선택하면 다음 노드는 절대 선택하면 안되고,
+// 현재 노드가 선택되지 않았다면 다음 노드는 선택될 수도 안될 수도 있다는 것
 //
 // 다음으로 해당 선택된 정점들을 출력해야 하는데 이 또한 재귀로 노드를 돌면서 확인
 // 이 때, d배열을 보고 K번째 노드가 선택되어야 할지 말지를 판단
@@ -25,19 +25,19 @@ public class Main {
     public static int[][] d;
     public static List<Integer>[] tree;
     public static List<Integer> selected = new ArrayList<>();
-    public static int dp(int cur, int pre) {
-        if(d[cur][pre] != -1) return d[cur][pre];
-        d[cur][pre] = pre == 1 ? w[cur] : 0;
+    public static int dp(int cur, int state) {
+        if(d[cur][state] != -1) return d[cur][state];
+        d[cur][state] = state == 1 ? w[cur] : 0;
         for(int next : tree[cur]) {
             if(visit[next]) continue;
             visit[next] = true;
-            // 전 노드가 선택되었을 경우
-            if(pre == 1) d[cur][pre] += dp(next, 0);
-            // 전 노드가 선택되지 않았을 경우
-            else d[cur][pre] += Math.max(dp(next, 0), dp(next, 1));
+            // 현 노드가 선택되었을 경우
+            if(state == 1) d[cur][state] += dp(next, 0);
+            // 현 노드가 선택되지 않았을 경우
+            else d[cur][state] += Math.max(dp(next, 0), dp(next, 1));
             visit[next] = false;
         }
-        return d[cur][pre];
+        return d[cur][state];
     }
     public static void trace(int cur, boolean isSelect) {
         if(isSelect) selected.add(cur);
