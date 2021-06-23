@@ -53,10 +53,6 @@ public class Main {
         }
         dfs(0, 1);
 
-        for(int i = 1; i <= N; i++) {
-            System.out.println(i + " : " + visit[i]);
-        }
-
         int[] dist = new int[N+1];
         Deque<Integer> q = new ArrayDeque<>();
         for(int i = 1; i <= N; i++) {
